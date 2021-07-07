@@ -436,6 +436,7 @@ function game() {
 		needCanvasUpdate = false;
 	}
 	tmp.scrolled = document.getElementById('treeTab') && document.getElementById('treeTab').scrollTop > 30
+	if(tick) diff=0.1
 	if((!tick&&!hasUpgrade("dev",13))||(!tick&&inChallenge("dev", 11))) diff=0
 	if(!hasChallenge("dev", 11)&&inChallenge("dev", 11)&&tick) diff*=100
 	if(hasChallenge("dev", 11)&&tick) diff *= 100
