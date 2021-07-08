@@ -42,6 +42,16 @@ function getPointGen() {
 	gain=gain.mul(layers.p.effect())
 	if(hasUpgrade("p",12)) gain=gain.mul(upgradeEffect("p",12))
 	if(hasUpgrade("p",13)) gain=gain.mul(upgradeEffect("p",13))
+	gain = gain.mul(challengeEffect("p",12))
+	if(hasUpgrade("p",24)) gain=gain.mul(upgradeEffect("p",24))
+	if(hasUpgrade("p",25)) gain=gain.mul(upgradeEffect("p",25))
+	if(inChallenge("p",12)||inChallenge("dev",21)){
+		if(gain.gte(player.p.points)){
+			gain=gain.div(player.p.points.add(1))
+			gain=gain.sqrt()
+			gain=gain.mul(player.p.points.add(1))
+		}
+	}
 	return gain
 }
 
@@ -51,12 +61,13 @@ function addedPlayerData() { return {
 
 // Display extra things at the top of the page
 var displayThings = [
-	function(){return "试着刷新游戏!这不是bug.Tip:自动存档间隔是1s."}
+	function(){return "试着刷新游戏!这不是bug.Tip:自动存档间隔是0.5s."},
+	function(){return "当前endgame:12开发点，约e53点数"}
 ]
 
 // Determines when the game "ends"
 function isEndgame() {
-	return false
+	return player.dev.points.gte(12)
 }
 
 
