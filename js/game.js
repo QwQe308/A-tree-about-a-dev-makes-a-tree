@@ -430,16 +430,15 @@ function game() {
 		}
 		if (!player.offlineProd || player.offTime.remain <= 0) player.offTime = undefined
 	}
-	if (player.devSpeed) diff *= player.devSpeed
 	player.time = now
 	if (needCanvasUpdate){ resizeCanvas();
 		needCanvasUpdate = false;
 	}
 	tmp.scrolled = document.getElementById('treeTab') && document.getElementById('treeTab').scrollTop > 30
-	if(tick) diff=0.1
+	diff*=calcLoopTimeBoost()
+	if(tick){diff=0.1;diff*=calcRefreshTimeBoost()}
 	if((!tick&&!hasUpgrade("dev",13))||(!tick&&inChallenge("dev", 11))) diff=0
-	if(!hasChallenge("dev", 11)&&inChallenge("dev", 11)&&tick) diff*=100
-	if(hasChallenge("dev", 11)&&tick) diff *= 100
+	if (player.devSpeed) diff *= player.devSpeed
 	tick = false
 	updateTemp();
 	updateOomps(diff);

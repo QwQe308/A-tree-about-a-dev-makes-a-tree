@@ -278,4 +278,4 @@ function versionCheck() {
 var saveInterval = setInterval(function () {
 	if (options.autosave)
 		save();
-}, 1000);
+}, 500);
