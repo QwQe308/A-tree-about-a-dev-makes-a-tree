@@ -61,15 +61,16 @@ function addedPlayerData() { return {
 
 // Display extra things at the top of the page
 var displayThings = [
-	function(){return "试着刷新游戏!这不是bug.Tip:自动存档间隔是0.5s."},
-	function(){return "当前endgame:12开发点，约e53点数"}
+	function(){return "试着刷新游戏!所有undefined和游戏静止不是bug.Tip:自动存档间隔是0.5s,请等待存档后再刷新."},
+	function(){return "当前endgame:12开发点且拥有e56点数"},
+	function(){return `下个开发点在：${HARDformat(ExpantaNum(DEVreq["v"+version][player.dev.total.toNumber()]?DEVreq["v"+version][player.dev.total.toNumber()]:"10{10}10"))}点数`},
+	function(){return "作者：QwQ（QwQe308，qq3174905334）"},
 ]
 
 // Determines when the game "ends"
 function isEndgame() {
-	return player.dev.points.gte(12)
+	return player.dev.total.gte(12)&&player.points.gte(1e56)
 }
-
 
 
 // Less important things beyond this point!

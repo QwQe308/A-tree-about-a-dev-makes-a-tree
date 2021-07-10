@@ -1,10 +1,17 @@
 var version = 0
 var DEVreq = {
-    v0:[0.2,1,2,30,90,1e10,1e11,1e13,1e30,1e31,1e50,1e53]
+    v0:[0.2,0.5,1,30,90,1e10,1e11,1e13,1e30,1e31,1e50,1e53]
+}
+var VERSIONreq = {
+    v0:1e56
+}
+var VERSIONchange = {
+    0:0,
+    1:0.1
 }
 var shownum = false
 var showprestigetext = false
-var layerslist=["p","dev"]
+var layerslist=["p","dev"/*,"v","u"*/]
 
 function isable(input){
     if(input) return 0;
@@ -25,7 +32,7 @@ addLayer("p", {
             "12log%":ExpantaNum(0),
         }
     }},
-    color: "#4BDC13",
+    color: "lightblue",
     canReset(){return hasUpgrade("dev",14)&&player.points.gte(layers.p.requires())},
     requires(){return new ExpantaNum(10)}, // Can be a function that takes requirement increases into account
     trueResource: "重置点(p点)", // Name of prestige currency
@@ -379,3 +386,121 @@ function calcRefreshTimeBoost(){
     if(inChallenge("dev",21)) tb*=Math.random()/5
     return tb
 }
+/*
+addLayer("v", {
+    name: "version", // This is optional, only used in a few places, If absent it just uses the layer id.
+    symbol: "V", // This appears on the layer's node. Default is the id with the first letter capitalized
+    position: 0, // Horizontal position within a row. By default it uses the layer id and sorts in alphabetical order
+    startData() { return {
+        unlocked: true,
+		points: new ExpantaNum(0),
+    }},
+    color: "#4BDC13",
+    branches:["dev"],
+    requires(){
+        if(VERSIONreq["v"+version]){return ExpantaNum(VERSIONreq["v"+version])}
+        else{return ExpantaNum("10{10}10")}
+    }, // Can be a function that takes requirement increases into account
+    trueResource: "版本更新点", // Name of prestige currency
+    trueBaseResource: "点数", // Name of resource prestige is based on
+    baseAmount() {return player.points}, // Get the current amount of baseResource
+    type: "normal", // normal: cost to gain currency depends on amount gained. static: cost depends on how much you already have
+    exponent: 0, // Prestige currency exponent
+    gainMult() { // Calculate the multiplier for main currency from bonuses
+        mult = new ExpantaNum(1)
+        return mult
+    },
+    gainExp() { // Calculate the exponent on main currency from bonuses
+        return new ExpantaNum(1)
+    },
+    row: 11, // Row the layer is in on the tree (0 is the first row)
+    hotkeys: [
+        {key: "v", description: "V: Reset for update", onPress(){if (canReset(this.layer)) doReset(this.layer)}},
+    ],
+    layerShown(){return player.dev.total.gte(12)},
+    clickables: {
+        11: {
+            canClick(){return player.v.upgrades!=[]},
+            display() {return `重置升级 返回你使用的 ${format(player.v.total.sub(player.v.points))} ${tmp[layer].resource}`},
+            onClick(){player.v.upgrades=[];player.v.points=player.v.total;for (let x = 10; x >= 0; x--) rowReset(x, "v");player.points = new ExpantaNum(0);player.v.activeChallenge=null}
+        }
+    },
+    upgrades: {
+        11: {
+            title: "next update is in 5 hours",
+            description: "解锁“更新”节点",
+            cost(){return new OmegaNum(1)},
+            unlocked(){return player.dev.total.gte(1)},
+        },
+    },
+    challenges: {
+        11: {
+            name: "AntiLooperrrr",
+            challengeDescription: "因为挑战出了bug，devU13被禁用了。刷新后的第一帧时间计数x100。",
+            canComplete(){return player.points.gte(1e10)},
+            goalDescription(){return format(ExpantaNum(1e10))+"点数"},
+            rewardDisplay(){return `你永远保留dev11的效果，同时“刷新后的第一帧时间计数x100。”被保留。`},
+            unlocked(){return hasUpgrade("dev",15)}
+        },
+    },
+
+    //inportant!!!
+    update(diff){
+        version = VERSIONchange[player.v.total]
+    }
+})
+
+addLayer("u", {
+    name: "update", // This is optional, only used in a few places, If absent it just uses the layer id.
+    symbol: "U", // This appears on the layer's node. Default is the id with the first letter capitalized
+    position: 0, // Horizontal position within a row. By default it uses the layer id and sorts in alphabetical order
+    startData() { return {
+        unlocked: true,
+		points: new ExpantaNum(0),
+    }},
+    color: "lime",
+    trueResource: "更新时间", // Name of prestige currency
+    type: "none", // normal: cost to gain currency depends on amount gained. static: cost depends on how much you already have
+    gainMult() { // Calculate the multiplier for main currency from bonuses
+        mult = new ExpantaNum(1)
+        return mult
+    },
+    gainExp() { // Calculate the exponent on main currency from bonuses
+        return new ExpantaNum(1)
+    },
+    row: 11, // Row the layer is in on the tree (0 is the first row)
+    hotkeys: [
+        {key: "v", description: "V: Reset for update", onPress(){if (canReset(this.layer)) doReset(this.layer)}},
+    ],
+    layerShown(){return player.dev.total.gte(12)},
+    clickables: {
+        11: {
+            canClick(){return player.v.upgrades!=[]},
+            display() {return `重置升级 返回你使用的 ${format(player.v.total.sub(player.v.points))} ${tmp[layer].resource}`},
+            onClick(){player.v.upgrades=[];player.v.points=player.v.total;for (let x = 10; x >= 0; x--) rowReset(x, "v");player.points = new ExpantaNum(0);player.v.activeChallenge=null}
+        }
+    },
+    upgrades: {
+        11: {
+            description: "next update is in 5 hours。",
+            cost(){return new OmegaNum(1)},
+            unlocked(){return player.dev.total.gte(1)},
+        },
+    },
+    challenges: {
+        11: {
+            name: "AntiLooperrrr",
+            challengeDescription: "因为挑战出了bug，devU13被禁用了。刷新后的第一帧时间计数x100。",
+            canComplete(){return player.points.gte(1e10)},
+            goalDescription(){return format(ExpantaNum(1e10))+"点数"},
+            rewardDisplay(){return `你永远保留dev11的效果，同时“刷新后的第一帧时间计数x100。”被保留。`},
+            unlocked(){return hasUpgrade("dev",15)}
+        },
+    },
+
+    //inportant!!!
+    update(diff){
+        version = VERSIONchange[player.v.total]
+    }
+})
+*/
