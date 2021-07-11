@@ -279,8 +279,8 @@ addLayer("dev", {
             unlocked(){return player.dev.total.gte(5)},
         },
         21: {
-            description: "开启开发者加速以便调试游戏。注：升级价格同样增加。",
-            cost(){return new OmegaNum(2)},
+            description: "开启开发者加速以便调试游戏。注：升级价格同样增加。该升级不能中途购买。",
+            cost(){return new OmegaNum(2).add(isable(player.p.total.eq(0)))},
             unlocked(){return player.dev.total.gte(6)},
             effect(){return ExpantaNum(10).pow(player.dev.total.sub(4).sqrt().sub(1)).toNumber()}
         },
