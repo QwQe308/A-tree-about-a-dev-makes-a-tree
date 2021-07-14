@@ -193,9 +193,9 @@ function load() {
 	}
 	else {
 		var a = LZString.decompressFromBase64(get.substr(216));
-		if(!a){a=atob(get)}
+		if(a=="null"){a=atob(get)}
 		else if(a[0]!="{"){a = atob(get)}
-		if(!a){		
+		if(a=="null"){		
 			player = getStartPlayer();
 			options = getStartOptions();
 			if (player.offlineProd) {
@@ -218,7 +218,7 @@ function load() {
 			loadVue();
 			return
 		}
-		else if(a[0]!="{"){
+		if(a[0]!="{"){
 			player = getStartPlayer();
 			options = getStartOptions();
 			if (player.offlineProd) {

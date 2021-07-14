@@ -1,4 +1,4 @@
-var version = 0
+var version = 54643642465
 var DEVreq = {
     v0:[0.2,0.5,1,30,90,1e10,1e11,1e13,1e30,1e31,1e50,1e53],
     "v0.1":[0.4,1,2,60,120,2e10,4e11,5e13,8e30,1e32,1e51,2.5e54],
@@ -29,7 +29,7 @@ function isable(input){
 }
 
 function getdevreq(){
-    var req = ExpantaNum(DEVreq["v"+version][player.dev.total.toNumber()]?DEVreq["v"+version][player.dev.total.toNumber()]:"10{10}10")
+    var req = DEVreq["v"+version] ? (DEVreq["v"+version][player.dev.total.toNumber()] ? DEVreq["v"+version][player.dev.total.toNumber()]:"10{10}10") : "10{10}10"
     if(getBuyableAmount("v",11).gte(1)) req = req.div(layers.v.buyables[11].effect1())
     return req
 }
