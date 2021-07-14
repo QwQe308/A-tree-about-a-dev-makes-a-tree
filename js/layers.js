@@ -580,13 +580,13 @@ var updtxt = {
     sim:"简化代码",
     pat:"锻炼耐心",
 }
-function progressU(ct,diff){
+function progressU(ct){
     var speed = player.u.stubuff
     speed = speed.pow(getpatbuff())
     var scaling = player.u.simbuff
     var testvalue = ct
     for(i=1;i<=4;i++){
-        testvalue = speed.add(1).root(testvalue.div(60).div(scaling).add(1)).sub(1).div(testvalue.div(60).add(1).pow(2).root(scaling.sqrt())).mul(diff).add(ct)
+        testvalue = speed.add(1).root(testvalue.div(60).div(scaling).add(1)).sub(1).div(testvalue.div(60).add(1).pow(2).root(scaling.sqrt())).mul(trueDiff).add(ct)
     }
     return testvalue
 }
@@ -677,7 +677,7 @@ addLayer("u", {
         player.u.stubuff = ten.pow(player.u.stutime.div(10).add(1).pow(0.33)).div(10)
         player.u.simbuff = getscaling(player.u.simtime)
         player.u.patbuff = ten.pow(player.u.pattime.div(10).add(1).log10().add(1).pow(0.75)).div(10)
-        player.u.patpoint = player.u.patpoint.add(player.u.patbuff.div(aday)).min(1)
+        player.u.patpoint = player.u.patpoint.add(player.u.patbuff.div(aday).mul(trueDiff)).min(1)
         if(player.u.doing!="none") player.u[player.u.doing+"time"] = progressU(player.u[player.u.doing+"time"],trueDiff)
         player.u.points = player.u.updtime.div(3600)
     }
