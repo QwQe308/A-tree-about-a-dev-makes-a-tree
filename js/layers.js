@@ -30,6 +30,7 @@ function isable(input){
 
 function getdevreq(){
     var req = DEVreq["v"+version] ? (DEVreq["v"+version][player.dev.total.toNumber()] ? DEVreq["v"+version][player.dev.total.toNumber()]:"10{10}10") : "10{10}10"
+    req = new ExpantaNum(req)
     if(getBuyableAmount("v",11).gte(1)) req = req.div(layers.v.buyables[11].effect1())
     return req
 }
