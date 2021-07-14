@@ -155,7 +155,7 @@ function HARDformat(decimal, precision = 2, small=false) {
     if(precision==0){
       return format(decimal.floor())}
     else if(f.length==1){
-      return fmt+".00"
+      return fmt
     }
     else if(f[1].length<precision){
       return fmt+"0".repeat(precision-f[1].length)
@@ -244,11 +244,12 @@ function formatWhole(decimal) {
 }
 
 function formatTime(s) {
-    if (s < 60) return format(s) + "s"
-    else if (s < 3600) return formatWhole(Math.floor(s / 60)) + "m " + format(s % 60) + "s"
-    else if (s < 86400) return formatWhole(Math.floor(s / 3600)) + "h " + formatWhole(Math.floor(s / 60) % 60) + "m " + format(s % 60) + "s"
-    else if (s < 31536000) return formatWhole(Math.floor(s / 86400) % 365) + "d " + formatWhole(Math.floor(s / 3600) % 24) + "h " + formatWhole(Math.floor(s / 60) % 60) + "m " + format(s % 60) + "s"
-    else return formatWhole(Math.floor(s / 31536000)) + "y " + formatWhole(Math.floor(s / 86400) % 365) + "d " + formatWhole(Math.floor(s / 3600) % 24) + "h " + formatWhole(Math.floor(s / 60) % 60) + "m " + format(s % 60) + "s"
+
+    if (s < 60) return HARDformat(s) + "s"
+    else if (s < 3600) return formatWhole(Math.floor(s / 60)) + "m " + HARDformat(s % 60) + "s"
+    else if (s < 86400) return formatWhole(Math.floor(s / 3600)) + "h " + formatWhole(Math.floor(s / 60) % 60) + "m " + HARDformat(s % 60) + "s"
+    else if (s < 31536000) return formatWhole(Math.floor(s / 86400) % 365) + "d " + formatWhole(Math.floor(s / 3600) % 24) + "h " + formatWhole(Math.floor(s / 60) % 60) + "m " + HARDformat(s % 60) + "s"
+    else return formatWhole(Math.floor(s / 31536000)) + "y " + formatWhole(Math.floor(s / 86400) % 365) + "d " + formatWhole(Math.floor(s / 3600) % 24) + "h " + formatWhole(Math.floor(s / 60) % 60) + "m " + HARDformat(s % 60) + "s"
 }
 
 function toPlaces(x, precision, maxAccepted) {
@@ -258,4 +259,19 @@ function toPlaces(x, precision, maxAccepted) {
         result = new ExpantaNum(maxAccepted - Math.pow(0.1, precision)).toString(precision)
     }
     return result
+}
+
+function timestr(input){
+  if(input.lt(1)) return "00"
+  if(input.lt(10)) return "0"+HARDformat(input.floor())[0]
+  return HARDformat(input.floor()).replace(".00","");
+}
+
+function Utimeformat(s){
+  if(s.lte(60)) return HARDformat(s,1) + "s"
+  if(s.lte(3600)){
+    return HARDformat(s.div(60).floor()).replace(".00","") + "m" + timestr(s.mod(60)) + "s"
+  } 
+  if(s.lte(86400)) return HARDformat(s.div(3600).floor()).replace(".00","") + "h" + timestr(s.div(60).mod(60)) + "m"
+  return HARDformat(s.div(3600).floor()).replace(".00","")+"h"
 }

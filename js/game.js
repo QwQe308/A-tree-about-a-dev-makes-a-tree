@@ -412,6 +412,7 @@ var interval = setInterval(game, 50)
 setInterval(function() {needCanvasUpdate = true}, 500)
 
 var tick = true
+var trueDiff = 0
 
 function game() {
 	if (player===undefined||tmp===undefined) return;
@@ -420,7 +421,9 @@ function game() {
 	ticking = true
 	let now = Date.now()
 	let diff = (now - player.time) / 1e3
-	let trueDiff = diff
+	diff = Math.min(diff,0.08)
+	trueDiff = diff
+	if(player.dev.trueDevMode) trueDiff*=10
 	if (player.offTime !== undefined) {
 		if (player.offTime.remain > modInfo.offlineLimit * 3600) player.offTime.remain = modInfo.offlineLimit * 3600
 		if (player.offTime.remain > 0) {
@@ -437,6 +440,7 @@ function game() {
 	tmp.scrolled = document.getElementById('treeTab') && document.getElementById('treeTab').scrollTop > 30
 	diff*=calcLoopTimeBoost()
 	if(tick){diff=0.1;diff*=calcRefreshTimeBoost()}
+	if(player.dev.trueDevMode) diff*=10
 	if((!tick&&!hasUpgrade("dev",13))||(!tick&&inChallenge("dev", 11))) diff=0
 	if (player.devSpeed) diff *= player.devSpeed
 	tick = false

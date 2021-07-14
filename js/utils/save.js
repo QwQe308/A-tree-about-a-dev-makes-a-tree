@@ -1,7 +1,7 @@
 // ************ Save stuff ************
 function save() {
-	localStorage.setItem(modInfo.id, btoa(unescape(encodeURIComponent(JSON.stringify(player)))));
-	localStorage.setItem(modInfo.id+"_options", btoa(unescape(encodeURIComponent(JSON.stringify(options)))));
+	localStorage.setItem(modInfo.id, unescape(encodeURIComponent("eyJhdXRvc2F2ZSI6dHJ1ZSwibXNEaXNwbGF5IjoiYWx3YXlzIiwidGhlbWUiOm51bGwsImhxVHJlZSI6ZmFsc2UsIm9mZmxpbmVQcm9kIjp0cnVlLCJoaWRlQ2hhbGxlbmdlcyI6ZmFsc2UsInNob3dTdG9yeSI6dHJ1ZSwiZm9yY2VPbmVUYWIiOmZhbHNlLCJvbGRTdHlsZSI6ZmFsc2V9"+LZString.compressToBase64(JSON.stringify(player)))));
+	localStorage.setItem(modInfo.id+"_options", unescape(encodeURIComponent(btoa(JSON.stringify(options)))));
   //ok it saved fine so the problem must be when loading
 }
 function startPlayerBase() {
@@ -192,13 +192,64 @@ function load() {
 		options = getStartOptions();
 	}
 	else {
-		player = Object.assign(getStartPlayer(), JSON.parse(atob(get)));
+		var a = LZString.decompressFromBase64(get.substr(216));
+		if(!a){a=atob(get)}
+		else if(a[0]!="{"){a = atob(get)}
+		if(!a){		
+			player = getStartPlayer();
+			options = getStartOptions();
+			if (player.offlineProd) {
+				if (player.offTime === undefined){
+					player.offTime = { remain: 0 }
+				};
+				player.offTime.remain += (Date.now() - player.time) / 1000;
+			}
+			player.time = Date.now();
+			versionCheck();
+			changeTheme();
+			changeTreeQuality();
+			updateLayers();
+			setupModInfo();
+		
+			setupTemp();
+			updateTemp();
+			updateTemp();
+			updateTabFormats();
+			loadVue();
+			return
+		}
+		else if(a[0]!="{"){
+			player = getStartPlayer();
+			options = getStartOptions();
+			if (player.offlineProd) {
+				if (player.offTime === undefined){
+					player.offTime = { remain: 0 }
+				};
+				player.offTime.remain += (Date.now() - player.time) / 1000;
+			}
+			player.time = Date.now();
+			versionCheck();
+			changeTheme();
+			changeTreeQuality();
+			updateLayers();
+			setupModInfo();
+		
+			setupTemp();
+			updateTemp();
+			updateTemp();
+			updateTabFormats();
+			loadVue();
+			return
+		}
+		a = JSON.parse(a);
+		player = Object.assign(getStartPlayer(), a);
 		fixSave();
 		loadOptions();
 	}
 	if (player.offlineProd) {
-		if (player.offTime === undefined)
-			player.offTime = { remain: 0 };
+		if (player.offTime === undefined){
+			player.offTime = { remain: 0 }
+		};
 		player.offTime.remain += (Date.now() - player.time) / 1000;
 	}
 	player.time = Date.now();
@@ -216,10 +267,12 @@ function load() {
 }
 function loadOptions() {
 	let get2 = localStorage.getItem(modInfo.id+"_options");
-	if (get2) 
+	if (get2) {
 		options = Object.assign(getStartOptions(), JSON.parse(decodeURIComponent(escape(atob(get2)))));
-	else 
+	}
+	else {
 		options = getStartOptions()
+	}
 
 
 }
@@ -229,7 +282,8 @@ function setupModInfo() {
 
 }
 function exportSave() {
-	let str = btoa(JSON.stringify(player));
+	let str = JSON.stringify(player);
+	str = "eyJhdXRvc2F2ZSI6dHJ1ZSwibXNEaXNwbGF5IjoiYWx3YXlzIiwidGhlbWUiOm51bGwsImhxVHJlZSI6ZmFsc2UsIm9mZmxpbmVQcm9kIjp0cnVlLCJoaWRlQ2hhbGxlbmdlcyI6ZmFsc2UsInNob3dTdG9yeSI6dHJ1ZSwiZm9yY2VPbmVUYWIiOmZhbHNlLCJvbGRTdHlsZSI6ZmFsc2V9"+LZString.compressToBase64(str);
 
 	const el = document.createElement("textarea");
 	el.value = str;
@@ -240,12 +294,15 @@ function exportSave() {
 	document.body.removeChild(el);
 }
 function importSave(imported = undefined, forced = false) {
-	if (imported === undefined)
-		imported = prompt("Paste your save here");
+	if (imported === undefined){
+		imported = prompt("Paste your save here")
+	};
 	try {
-		tempPlr = Object.assign(getStartPlayer(), JSON.parse(atob(imported)));
-		if (tempPlr.versionType != modInfo.id && !forced && !confirm("This save appears to be for a different mod! Are you sure you want to import?")) // Wrong save (use "Forced" to force it to accept.)
-			return;
+		var a = LZString.decompressFromBase64(imported.substr(216));
+		if(a[0] != "{"){a = atob(imported)};
+		a = JSON.parse(a);
+		tempPlr = Object.assign(getStartPlayer(), a);
+		if (tempPlr.versionType != modInfo.id && !forced && !confirm("This save appears to be for a different mod! Are you sure you want to import?")){return};
 		player = tempPlr;
 		player.versionType = modInfo.id;
 		fixSave();
@@ -267,8 +324,9 @@ function versionCheck() {
 	if (setVersion) {
 		if (player.versionType == modInfo.id && VERSION.num > player.version) {
 			player.keepGoing = false;
-			if (fixOldSave)
-				fixOldSave(player.version);
+			if (fixOldSave){
+				fixOldSave(player.version)
+			};
 		}
 		player.versionType = getStartPlayer().versionType;
 		player.version = VERSION.num;
@@ -276,6 +334,5 @@ function versionCheck() {
 	}
 }
 var saveInterval = setInterval(function () {
-	if (options.autosave)
-		save();
+	if (options.autosave){save()};
 }, 500);
