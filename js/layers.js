@@ -483,7 +483,7 @@ addLayer("v", {
             cost(x) { return x.add(1) },
             display() {
                 var str = "buff11:更新<br />"
-                str += `<txt style="color:${getBuyableAmount(this.layer, this.id).gte(1) ? "black" : "grey"}">LV1:更新时间降低开发点需求.(/${HARDformat(this.effect1())})</txt><br />价格:${this.cost(getBuyableAmount(this.layer, this.id))}增益点`
+                str += `<txt style="color:${getBuyableAmount(this.layer, this.id).gte(1) ? "black" : "grey"}">LV1:更新时间降低开发点需求.(/${HARDformat(this.effect1(),1)})同时增幅点数获取.(x${HARDformat(this.effect1().sqrt(),1)})</txt><br />价格:${this.cost(getBuyableAmount(this.layer, this.id))}增益点`
                  return str 
             },
             canAfford() { return player[this.layer].buffp.add(this.cost()).lte(player.v.points) },

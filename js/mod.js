@@ -16,6 +16,8 @@ let VERSION = {
 }
 
 let changelog = `<h1>更新内容(游戏真实版本):</h1><br>
+	<h2>v0.23</h2><br>
+		- 平衡了v0.1的流程。<br><br>
 	<h2>v0.22</h2><br>
 		- 修复若干bug，制作u节点的第一层重置。<br><br>
 	<h2>v0.21</h2><br>
@@ -47,6 +49,8 @@ function canGenPoints(){
 function getPointGen() {
 	if(!canGenPoints()) return new ExpantaNum(0)
 	let gain = new ExpantaNum(1)
+	if(getBuyableAmount("v",11).gte(1)) gain = gain.mul(layers.v.buyables[11].effect1().sqrt())
+
 	gain=gain.mul(layers.p.effect())
 	if(hasUpgrade("p",12)) gain=gain.mul(upgradeEffect("p",12))
 	if(hasUpgrade("p",13)) gain=gain.mul(upgradeEffect("p",13))
