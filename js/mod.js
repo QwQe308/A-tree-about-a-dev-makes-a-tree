@@ -15,10 +15,18 @@ let VERSION = {
 	name: "",
 }
 
-let changelog = `<h1>Changelog:</h1><br>
-	<h3>v0.0</h3><br>
-		- Added things.<br>
-		- Added stuff.`
+let changelog = `<h1>更新内容(游戏真实版本):</h1><br>
+	<h2>v0.22</h2><br>
+		- 修复若干bug，制作u节点的第一层重置。<br><br>
+	<h2>v0.21</h2><br>
+		- 修复若干bug，完善左上提示。<br><br>
+	<h2>v0.2</h2><br>
+		- 制作v节点和u节点框架，完善左上提示。<br><br>
+	<h2>v0.11</h2><br>
+		- 制作dev后5个升级，完善左上提示。<br><br>
+	<h2>v0.1</h2><br>
+		- 添加dev节点，制作dev前五个升级。
+	`
 
 let winText = `Congratulations! You have reached the end and beaten this game, but for now...`
 
