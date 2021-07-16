@@ -74,7 +74,7 @@ function addedPlayerData() { return {
 // Display extra things at the top of the page
 var displayThings = [
 	function(){return "试着刷新游戏!所有undefined和游戏静止不是bug.Tip:自动存档间隔是0.5s,请等待存档后再刷新."},
-	function(){return "当前endgame:12开发点且拥有e56点数"},
+	function(){return "当前endgame:v0.1中拥有12开发点且拥有e56点数"},
 	function(){return `下个开发点在：${HARDformat(getdevreq())}点数`},
 	function(){return `每次刷新能前进0.1s!${player.v.nerfp.lt(player.v.points) ? "<warning style='color:red'>(WARNING:减益点未达到目标!你的游戏暂停!)</warning>" : ""}`},
 	function(){return "作者：QwQ（QwQe308，qq3174905334）"},
@@ -82,7 +82,7 @@ var displayThings = [
 
 // Determines when the game "ends"
 function isEndgame() {
-	return player.dev.total.gte(12)&&player.points.gte(1e56)
+	return player.dev.total.gte(12)&&player.points.gte(1e56)&&player.v.points.eq(1)
 }
 
 
